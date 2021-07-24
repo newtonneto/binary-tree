@@ -25,6 +25,19 @@ public class Test implements ITest {
 
         wanted_node = this.tree.findNode(this.root, "5");
 
-        System.out.println(wanted_node);
+        System.out.println("Wanted Node: " + wanted_node);
+
+        Node viteeum = new Node(21);
+        Node viteedois = new Node(22);
+        five.setRightChild(viteeum);
+        five.setLeftChild(viteedois);
+
+        Node trintaeum = new Node(31);
+
+        viteedois.setRightChild(trintaeum);
+
+        System.out.println("Tree Height: " + tree.height(root));
+
+        tree.inOrderCrossing(root);
     }
 }

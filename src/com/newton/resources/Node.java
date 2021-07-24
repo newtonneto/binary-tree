@@ -10,11 +10,15 @@ public class Node implements INode {
 
     public Node(Object key) {
         this.parent = null;
+        this.left_child = null;
+        this.right_child = null;
         this.key = key;
     }
 
     public Node(Node node, Object key) {
         this.parent = node;
+        this.left_child = null;
+        this.right_child = null;
         this.key = key;
     }
 

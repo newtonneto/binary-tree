@@ -14,7 +14,7 @@ public class Tree implements ITree {
         Integer first_value = Integer.parseInt(first_key.toString());
         Integer second_value = Integer.parseInt(second_key.toString());
 
-        System.out.println("First value: " + first_value + " Second value: " + second_value);
+        //System.out.println("First value: " + first_value + " Second value: " + second_value);
 
         if (first_value < second_value) {
             //Retorna -1 caso o wanted_node seja menor que o root atual
@@ -69,16 +69,39 @@ public class Tree implements ITree {
     @Override
     public void inOrderCrossing(Node node) {
         //Se o node não for externo, visite o filho esquerdo
-        if (node.isInternal()) {
+        if (node.isInternal() && node.getLeftChild() != null) {
             inOrderCrossing(node.getLeftChild());
         }
 
         //Visite o proprio node
-        System.out.println(node);
+        System.out.println("Node: " + node.toString() + " height: " + height(node));
 
         //Se o node não for externo, visite o node direito
-        if (node.isInternal()) {
+        if (node.isInternal() && node.getRightChild() != null) {
             inOrderCrossing(node.getRightChild());
         }
+    }
+
+    @Override
+    public int height(Node node) {
+        if (!node.isInternal()) {
+            return 0;
+        }
+
+        int tree_height = 0;
+        if (node.getLeftChild() != null) {
+            tree_height = Math.max(tree_height, height(node.getLeftChild()));
+        } else if (node.getRightChild() != null) {
+            tree_height = Math.max(tree_height, height(node.getRightChild()));
+        }
+
+        return tree_height + 1;
+    }
+
+
+
+    @Override
+    public void addNode(Node node) {
+
     }
 }
