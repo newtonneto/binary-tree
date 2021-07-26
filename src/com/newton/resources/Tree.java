@@ -4,66 +4,63 @@ import com.newton.interfaces.ITree;
 
 public class Tree implements ITree {
     private Node root;
+    private Integer node_quantity;
 
     public Tree(Node root) {
+        this.node_quantity = 0;
         this.root = root;
     }
 
     @Override
-    public int compareNodes(Object first_key, Object second_key) {
+    public Integer compareNodes(Object first_key, Object second_key) {
         Integer first_value = Integer.parseInt(first_key.toString());
         Integer second_value = Integer.parseInt(second_key.toString());
+        Integer result;
 
-        //System.out.println("First value: " + first_value + " Second value: " + second_value);
+        if (first_value > second_value) {
+            result = -1;
+        } else if (first_value < second_value) {
+            result = 1;
+        } else {
+            result = 0;
+        }
 
-        if (first_value < second_value) {
-            //Retorna -1 caso o wanted_node seja menor que o root atual
-            return -1;
-        } else if (first_value > second_value) {
-            //Retorna 1 caso o wanted_node seja maior que o root atual
-            return 1;
-        };
-
-        //Retorna 0 caso o wanted_node seja igual ao root atual
-        return 0;
+        return result;
     }
 
     @Override
     public Node findNode(Node root, Object wanted_node) {
-        Node search_result = null;
-        Integer compare_result = this.compareNodes(wanted_node, root.getKey());
+        Integer comparation = compareNodes(root.getKey(), wanted_node);
+        Node finded_node = null;
 
-        //Se a key buscada for menor que o valor do root atual, busque no filho esquerdo
-        if (compare_result == -1 && search_result == null) {
-            Node left_child = root.getLeftChild();
-
-            //Se o root atual possuir um filho esquerdo, buscar o wanted_node nele
-            if (left_child != null) {
-                search_result = findNode(left_child, wanted_node);
+        //Buscar no node esquerdo
+        if (comparation == -1 && finded_node == null) {
+            //Se o lado esquerdo do root atual for nulo, retorne o root pois o novo node será inserido nele
+            if (root.getLeftChild() == null) {
+                return root;
             }
-
-            //Se não tiver quer dizer que o wanted_node não existe nessa árvore
-            return search_result;
-        }
-        //Se a key buscada for maior que o valor do root atual, busque no filho direito
-        else if (compare_result == 1 && search_result == null) {
-            Node right_child = root.getRightChild();
-
-            //Se o root atual possuir um filho direito, buscar o wanted_node nele
-            if (right_child != null) {
-                search_result = findNode(right_child, wanted_node);
+            //Se não for, continue a busca
+            else {
+                finded_node = findNode(root.getLeftChild(), wanted_node);
             }
-
-            //Se não tiver quer dizer que o wanted_node não existe nessa árvore
-            return search_result;
         }
-        //Se as keys forem igual o wanted_node é o root atual
-        else if (compare_result == 0) {
-            return  search_result = root;
+        //Buscar no node direito
+        else if (comparation == 1 && finded_node == null) {
+            //Se o lado direito do root atual for nulo, retorne o root pois o novo node será inserido nele
+            if (root.getRightChild() == null) {
+                return root;
+            }
+            //Se não for, continue a busca
+            else {
+                finded_node = findNode(root.getRightChild(), wanted_node);
+            }
+        }
+        //Se o resultado da comparação for 0, o node buscado existe na árvore
+        else {
+            return root;
         }
 
-        //Caso todas as condicionais falhem, o wanted_node n existe na árvore
-        return null;
+        return finded_node;
     }
 
     @Override
@@ -83,25 +80,102 @@ public class Tree implements ITree {
     }
 
     @Override
-    public int height(Node node) {
-        if (!node.isInternal()) {
-            return 0;
-        }
+    public Integer height(Node node) {
+        Integer node_height = 0;
+        Node left_child = node.getLeftChild();
+        Node right_child = node.getRightChild();
 
-        int tree_height = 0;
-        if (node.getLeftChild() != null) {
-            tree_height = Math.max(tree_height, height(node.getLeftChild()));
-        } else if (node.getRightChild() != null) {
-            tree_height = Math.max(tree_height, height(node.getRightChild()));
-        }
+        //Percore os nodes filhos somando as suas alturas
 
-        return tree_height + 1;
+        if (left_child != null) {
+            node_height = node_height + height(left_child);
+        }
+        if (left_child == null && right_child == null) {
+            node_height = node_height + 1;
+        }
+        if (right_child != null) {
+            node_height = node_height + height(right_child);
+        };
+
+        return node_height;
     }
 
+    @Override
+    public void addNode(Node root, Node node) {
+        //Verifica se o node já existe na árvore, se não existir recebe o node pai do novo node
+        Node parent_node = findNode(this.root, node.getKey());
 
+        if (parent_node.getKey() == node.getKey()) {
+            System.out.println("O node passado já existe na árvore");
+        } else {
+            //Verifica se o novo node é maior ou menor que o seu pai
+            Integer comparation = this.compareNodes(parent_node.getKey(), node.getKey());
+            node.setParent(parent_node);
+            this.node_quantity = this.node_quantity + 1;
+
+            //Será filho esquerdo
+            if (comparation == -1) {
+                parent_node.setLeftChild(node);
+            }
+            //Será filho direito
+            else if (comparation == 1) {
+                parent_node.setRightChild(node);
+            }
+        }
+    }
 
     @Override
-    public void addNode(Node node) {
+    public void print() {
+        Integer rows = this.height(this.root) + 1;
+        Integer columns = this.node_quantity + 1;
+        Object [][] matrix = new Object[rows][columns];
 
+        //this.createMatrix(this.root, matrix);
+
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (matrix[row][column] == null) {
+                    System.out.printf(" ");
+                } else {
+                    System.out.printf(matrix[row][column].toString());
+                }
+            }
+            System.out.println("");
+        }
+    }
+
+    /*@Override
+    public void createMatrix(Node node, Object[][] matrix) {
+        //Se o node não for externo, visite o filho esquerdo
+        if (node.isInternal() && node.getLeftChild() != null) {
+            createMatrix(node.getLeftChild(), matrix);
+        }
+
+        //Visite o proprio node
+        matrix[height(node)][0] = node;
+
+        //Se o node não for externo, visite o node direito
+        if (node.isInternal() && node.getRightChild() != null) {
+            createMatrix(node.getRightChild(), matrix);
+        }
+    }*/
+
+    @Override
+    public void printNode(Node node, Integer spaces) {
+        spaces = spaces + 10;
+
+        if (node.getLeftChild() != null) {
+            printNode(node.getLeftChild(), spaces);
+        }
+
+        System.out.print("\n");
+        for (int index = 10; index < spaces; index++) {
+            System.out.print(" ");
+        }
+        System.out.print(node.getKey() + "\n");
+
+        if (node.getLeftChild() != null) {
+            printNode(node.getRightChild(), spaces);
+        }
     }
 }

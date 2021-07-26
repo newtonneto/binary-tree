@@ -11,33 +11,28 @@ public class Test implements ITest {
     }
 
     public void executeTestOne() {
-        Node eight = new Node("8");
-        Node eleven = new Node("11");
+        Node node_5 = new Node(5);
+        Node node_15 = new Node(15);
+        tree.addNode(root, node_5);
+        tree.addNode(root, node_15);
 
-        this.root.setLeftChild(eight);
-        this.root.setRightChild(eleven);
+        Node node_8 = new Node(8);
+        Node node_18 = new Node(18);
+        tree.addNode(root, node_8);
+        tree.addNode(root, node_18);
 
-        Node five = new Node("5");
 
-        eight.setLeftChild(five);
-
-        Node wanted_node;
-
-        wanted_node = this.tree.findNode(this.root, "5");
-
-        System.out.println("Wanted Node: " + wanted_node);
-
-        Node viteeum = new Node(21);
-        Node viteedois = new Node(22);
-        five.setRightChild(viteeum);
-        five.setLeftChild(viteedois);
-
-        Node trintaeum = new Node(31);
-
-        viteedois.setRightChild(trintaeum);
-
-        System.out.println("Tree Height: " + tree.height(root));
+        Node node_13 = new Node(13);
+        tree.addNode(root, node_13);
 
         tree.inOrderCrossing(root);
+
+        System.out.println("");
+        //tree.printNode(root, 0);
+
+        Node node_14 = new Node(14);
+        tree.addNode(root, node_14);
+
+        tree.printNode(root, 0);
     }
 }
