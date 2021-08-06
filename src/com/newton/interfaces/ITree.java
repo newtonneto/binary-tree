@@ -8,6 +8,5 @@ public interface ITree {
     void inOrderCrossing(Node node);
     Integer height(Node node);
     void addNode(Node root, Node node);
-    void print();
-    void printNode(Node node, Integer spaces);
+    void print(Node node, Integer spaces);
 }

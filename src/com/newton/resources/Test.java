@@ -25,14 +25,29 @@ public class Test implements ITest {
         Node node_13 = new Node(13);
         tree.addNode(root, node_13);
 
-        tree.inOrderCrossing(root);
-
         System.out.println("");
-        //tree.printNode(root, 0);
 
+        Node node_2 = new Node(2);
+        Node node_3 = new Node(3);
+        Node node_4 = new Node(4);
+        Node node_7 = new Node(7);
+        Node node_9 = new Node(9);
+        Node node_12 = new Node(12);
         Node node_14 = new Node(14);
+        Node node_17 = new Node(17);
+        Node node_19 = new Node(19);
+        tree.addNode(root, node_3);
+        tree.addNode(root, node_2);
+        tree.addNode(root, node_4);
+        tree.addNode(root, node_7);
+        tree.addNode(root, node_9);
+        tree.addNode(root, node_12);
         tree.addNode(root, node_14);
+        tree.addNode(root, node_17);
+        tree.addNode(root, node_19);
 
-        tree.printNode(root, 0);
+        tree.print(root, 0);
+
+        tree.inOrderCrossing(root);
     }
 }

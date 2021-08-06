@@ -81,23 +81,11 @@ public class Tree implements ITree {
 
     @Override
     public Integer height(Node node) {
-        Integer node_height = 0;
-        Node left_child = node.getLeftChild();
-        Node right_child = node.getRightChild();
-
-        //Percore os nodes filhos somando as suas alturas
-
-        if (left_child != null) {
-            node_height = node_height + height(left_child);
+        if (node != null) {
+            return Math.max(height(node.getLeftChild()), height(node.getRightChild())) + 1;
+        } else {
+            return 0;
         }
-        if (left_child == null && right_child == null) {
-            node_height = node_height + 1;
-        }
-        if (right_child != null) {
-            node_height = node_height + height(right_child);
-        };
-
-        return node_height;
     }
 
     @Override
@@ -125,47 +113,11 @@ public class Tree implements ITree {
     }
 
     @Override
-    public void print() {
-        Integer rows = this.height(this.root) + 1;
-        Integer columns = this.node_quantity + 1;
-        Object [][] matrix = new Object[rows][columns];
-
-        //this.createMatrix(this.root, matrix);
-
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                if (matrix[row][column] == null) {
-                    System.out.printf(" ");
-                } else {
-                    System.out.printf(matrix[row][column].toString());
-                }
-            }
-            System.out.println("");
-        }
-    }
-
-    /*@Override
-    public void createMatrix(Node node, Object[][] matrix) {
-        //Se o node não for externo, visite o filho esquerdo
-        if (node.isInternal() && node.getLeftChild() != null) {
-            createMatrix(node.getLeftChild(), matrix);
-        }
-
-        //Visite o proprio node
-        matrix[height(node)][0] = node;
-
-        //Se o node não for externo, visite o node direito
-        if (node.isInternal() && node.getRightChild() != null) {
-            createMatrix(node.getRightChild(), matrix);
-        }
-    }*/
-
-    @Override
-    public void printNode(Node node, Integer spaces) {
+    public void print(Node node, Integer spaces) {
         spaces = spaces + 10;
 
-        if (node.getLeftChild() != null) {
-            printNode(node.getLeftChild(), spaces);
+        if (node.isInternal() && node.getLeftChild() != null) {
+            print(node.getLeftChild(), spaces);
         }
 
         System.out.print("\n");
@@ -174,8 +126,8 @@ public class Tree implements ITree {
         }
         System.out.print(node.getKey() + "\n");
 
-        if (node.getLeftChild() != null) {
-            printNode(node.getRightChild(), spaces);
+        if (node.isInternal() && node.getRightChild() != null) {
+            print(node.getRightChild(), spaces);
         }
     }
 }
